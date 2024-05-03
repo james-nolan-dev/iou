@@ -7,6 +7,8 @@ import me.nolanjames.iouserver.domain.user.dto.AppUserRequest;
 import me.nolanjames.iouserver.domain.user.dto.AppUserResponse;
 import me.nolanjames.iouserver.domain.user.service.AppUserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +27,10 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequiredArgsConstructor
 public class AppUserController {
     private final AppUserService userService;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<HttpResponse> registerUser(@Valid @RequestBody AppUserRequest request) {
+    public ResponseEntity<HttpResponse> register(@Valid @RequestBody AppUserRequest request) {
         AppUserResponse response = userService.createUser(request);
         return ResponseEntity.created(getUri())
                 .body(HttpResponse.builder()
@@ -37,6 +40,12 @@ public class AppUserController {
                         .status(CREATED)
                         .statusCode(CREATED.value())
                         .build());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<HttpResponse> login(String email, String password) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        return null;
     }
 
     private URI getUri() {
