@@ -16,4 +16,6 @@ public interface AppUserRepository<T extends AppUser> {
     Boolean delete(Long id);
 
     Integer isEmailUnique(String email);
+
+    AppUser getUserByEmail(String email);
 }

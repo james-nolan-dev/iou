@@ -22,6 +22,7 @@ public class AppUserServiceImpl implements AppUserService {
     private final AppUserMapper mapper;
     private final VerificationService verificationService;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final AppUserMapper appUserMapper;
 
 
     @Override
@@ -40,7 +41,12 @@ public class AppUserServiceImpl implements AppUserService {
         savedUserEntity.setEnabled(false);
         savedUserEntity.setNotLocked(true);
 
-        log.info("Added new user to database with id: " + savedUserEntity.getId());
+        log.info("Added new user to database with id: {}", savedUserEntity.getId());
         return mapper.mapToResponse(savedUserEntity);
+    }
+
+    @Override
+    public AppUserResponse getUserByEmail(String email) {
+        return appUserMapper.mapToResponse(appUserRepository.getUserByEmail(email));
     }
 }

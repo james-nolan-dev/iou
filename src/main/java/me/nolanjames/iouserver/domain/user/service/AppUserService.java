@@ -5,4 +5,5 @@ import me.nolanjames.iouserver.domain.user.dto.AppUserResponse;
 
 public interface AppUserService {
     AppUserResponse createUser(AppUserRequest appUserRequest);
+    AppUserResponse getUserByEmail(String email);
 }
